@@ -19,15 +19,14 @@ const versionIndices = {
 };
 
 app.post('/api/run-code', async (req, res) => {
-  let { code, input, language } = req.body;
+  let { code, input, language ,clientId,clientSecret} = req.body;
 
   const versionIndex = versionIndices[language] || "0"; 
   language=(language==="c_cpp")?"cpp17":(language==="java")?"java":(language==="python")?"python3":"go";
   try {
     const response = await axios.post('https://api.jdoodle.com/v1/execute', {
-      clientId: process.env.JDOODLE_CLIENT_ID,
-      clientSecret: process.env.JDOODLE_CLIENT_SECRET,
-
+      clientId: clientId,
+      clientSecret: clientSecret,
       script: code,
       language: language,
       versionIndex: versionIndex,
@@ -42,5 +41,5 @@ app.post('/api/run-code', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at port: ${port}`);
 });
